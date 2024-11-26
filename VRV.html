@@ -1,0 +1,72 @@
+// RoleManagement.js
+import React, { useState, useEffect } from 'react';
+
+const RoleManagement = () => {
+  const [roles, setRoles] = useState([]);
+  const [roleName, setRoleName] = useState('');
+  const [permissions, setPermissions] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/roles')
+      .then(response => response.json())
+      .then(data => setRoles(data));
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    fetch('/api/roles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roleName, permissions }),
+    })
+      .then(response => response.json())
+      .then(data => setRoles([...roles, data]));
+  };
+
+  const handleEdit = (role) => {
+    fetch(`/api/roles/${(link unavailable)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(role),
+    })
+      .then(response => response.json())
+      .then(data => setRoles(roles.map(r => ((link unavailable) === (link unavailable) ? data : r))));
+  };
+
+  return (
+    <div>
+      <h1>Role Management</h1>
+      <form onSubmit={handleSubmit}>
+        <label>Role Name:</label>
+        <input type="text" value={roleName} onChange={(event) => setRoleName(event.target.value)} />
+        <br />
+        <label>Permissions:</label>
+        <input type="text" value={permissions} onChange={(event) => setPermissions(event.target.value)} />
+        <br />
+        <button type="submit">Add Role</button>
+      </form>
+      <table>
+        <thead>
+          <tr>
+            <th>Role Name</th>
+            <th>Permissions</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {roles.map((role) => (
+            <tr key={(link unavailable)}>
+              <td>{role.roleName}</td>
+              <td>{role.permissions}</td>
+              <td>
+                <button onClick={() => handleEdit(role)}>Edit</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default RoleManagement;
